@@ -6,6 +6,6 @@ class livre:
         self.nombre_page=nbp
         self.statut=statut
     def afficher_details(self):
-        return f"titre={self.titre} auteur={self.auteur} pages={self.nombre_page} statut={self.statuthh}"
+        return f"titre={self.titre} auteur={self.auteur} pages={self.nombre_page} statut={self.statut}"
 
         
