@@ -1,1 +1,11 @@
 print("hello world")
+class livre:
+    def __init__(self,titre,auteur,nbp,statut="disponible"):
+        self.titre=titre
+        self.auteur=auteur
+        self.nombre_page=nbp
+        self.statut=statut
+    def afficher_details(self):
+        return f"titre={self.titre} auteur={self.auteur} pages={self.nombre_page} statut={self.statut}"
+
+        
