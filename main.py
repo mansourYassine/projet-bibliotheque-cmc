@@ -1,4 +1,3 @@
-print("hello world")
 class livre:
     def __init__(self,titre,auteur,nbp,statut="disponible"):
         self.titre=titre
