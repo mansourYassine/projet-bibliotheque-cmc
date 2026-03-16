@@ -16,4 +16,5 @@ class livre:
         self.statut="disponible"
         print("le livre est maintenent disponible")
 
-        
+if __name__ == "__main__":
+    print("test")
