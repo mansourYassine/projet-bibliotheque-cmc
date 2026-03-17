@@ -30,4 +30,5 @@ class bibliotheque:
             if livre.titre==titre:
                 return livre
 
-        
+if __name__ == "__main__":
+    print("test")
