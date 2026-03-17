@@ -1,3 +1,4 @@
+import tkinter as tk
 class livre:
     def __init__(self,titre,auteur,nbp,statut="disponible"):
         self.titre=titre
@@ -32,3 +33,9 @@ class bibliotheque:
 
 if __name__ == "__main__":
     print("test")
+    fenetre=tk.TK()
+    fenetre.title("Projet Bibliotheque")
+    fenetre.geometry("500x600")
+
+
+    fenetre.mainloop()
