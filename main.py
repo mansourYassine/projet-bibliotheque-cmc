@@ -24,8 +24,8 @@ class bibliotheque:
             self.listeLivre.append(livre)
     def afficher_livre_disponible(self):
         for livre in self.listeLivre:
-           if livre.statut=="disponible":
-               return livre.titre
+            if livre.statut=="disponible":
+                return livre.titre
     def rechercher_livre(self,titre):
         for livre in self.listeLivre:
             if livre.titre==titre:
