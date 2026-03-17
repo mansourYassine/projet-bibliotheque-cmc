@@ -1,4 +1,3 @@
-print("hello world")
 class livre:
     def __init__(self,titre,auteur,nbp,statut="disponible"):
         self.titre=titre
@@ -10,11 +9,25 @@ class livre:
     def emprunter(self):
         if self.statut=="disponible":
             self.statut="emprunté"
-            print("le livre est emprunté")
-        else:
-            print("le livre est deja emprunté")
+            return "livre emprunté"
     def rendre(self):
         self.statut="disponible"
-        print("le livre est maintenent disponible")
+        return "livre rendu"
+class bibliotheque:
+    def __init__(self,nom,adresse):
+        self.nom=nom
+        self.adresse=adresse
+        self.listeLivre=[]
+    def ajouter_livre(self,livre):
+        if livre not in self.listeLivre:
+            self.listeLivre.append(livre)
+    def afficher_livre_disponible(self):
+        for livre in self.listeLivre:
+           if livre.statut=="disponible":
+               return livre.titre
+    def rechercher_livre(self,titre):
+        for livre in self.listeLivre:
+            if livre.titre==titre:
+                return livre
 
         
