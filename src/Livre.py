@@ -1,8 +1,5 @@
 class Livre:
-    nombre_livre=0
     def __init__(self,titre,auteur,nbp,statut="disponible"):
-        self.nombre_livre+=1
-        self.id_livre=self.nombre_livre
         self.titre=titre
         self.auteur=auteur
         self.nombre_page=nbp

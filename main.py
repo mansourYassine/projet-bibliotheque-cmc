@@ -17,20 +17,33 @@ def show_main_app():
     login_frame.pack_forget()  # hide login
     main_frame.pack(fill="both", expand=True)
 
+def ajoute_livre():
+    nv_titre = titre_livre.get()
+    nv_auteur = auteur_livre.get()
+    nv_nbre_page = nbre_page_livre.get()
+    
+    livre = Livre(nv_titre, nv_auteur, nv_nbre_page)
+    biblio.ajouter_livre(livre)
+
 
 root = Tk()
 root.geometry("500x500")
 root.title("Bibliothèque CMC")
 root.config(bg="#04bfb0")
 
-# ----LOGIN FRAME----
+biblio = Bibliotheque("Bibliothèque CMC", "Deroua")
+biblio.charger_livre() # Charger les livres dans l'attribut listeLivres[] depuis csv
+
+# ----Page de se connecter----
 login_frame = Frame(root, bg="#04bfb0")
 login_frame.pack(fill="both", expand=True)
 
 formulaire = Frame(login_frame)
 formulaire.pack()
+
 # Titre de formulaire
 Label(formulaire, text="Connecter à votre compte", font=("arial", 20)).grid(row=0, column=0, columnspan=2)
+
 #Nom utilisateur
 Label(formulaire, text="Nom Utilisateur:").grid(row=1, column=0)
 user_name = Entry(formulaire, font=('arial', 20))
@@ -43,8 +56,36 @@ user_password.grid(row=2, column=1)
 
 Button(formulaire, text="se connecter", command=check_login).grid(row=3, column=0, columnspan=2)
 
-# ----MAIN APP FRAME----
+# ----L'application principale----
 main_frame = Frame(root, bg="white")
+# main_frame.pack(fill="both", expand=True) # This line should be removed when you incomment the login code
+
+notebook = ttk.Notebook(main_frame)
+
+# Ajouter livre
+ajoute_tab = Frame(notebook, bg="#04bfb0")
+notebook.add(ajoute_tab, text="Ajouter Livre")
+
+form_frame = Frame(ajoute_tab)
+form_frame.pack()
+title_form = Label(form_frame, text="Entrer les informations de livre:")
+title_form.grid(row=0, column=0, columnspan=2)
+# Titre
+Label(form_frame, text="Titre").grid(row=1, column=0)
+titre_livre = Entry(form_frame)
+titre_livre.grid(row=1, column=1)
+# Auteur
+Label(form_frame, text="Auteur").grid(row=2, column=0)
+auteur_livre = Entry(form_frame)
+auteur_livre.grid(row=2, column=1)
+# nombre pages
+Label(form_frame, text="Nbre pages").grid(row=3, column=0)
+nbre_page_livre = Entry(form_frame)
+nbre_page_livre.grid(row=3, column=1)
+# Enregistrer
+Button(form_frame, text="Ajouter", command=ajoute_livre).grid(row=4, column=0, columnspan=2)
+
+notebook.pack(expand=True, fill='both')
 
 # start app
 root.mainloop()
