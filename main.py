@@ -24,6 +24,32 @@ def ajoute_livre():
     
     livre = Livre(nv_titre, nv_auteur, nv_nbre_page)
     biblio.ajouter_livre(livre)
+    global tree
+    tree.insert("", "end", values=(nv_titre, nv_auteur, nv_nbre_page, "disponible"))
+
+def afficher_dispo_livres():
+    # define columns
+    tree["columns"] = ("titre", "auteur", "nombre page", "statut")
+
+    # format columns
+    tree.column("#0", width=0, stretch=NO)  # hidden first column
+    tree.column("titre", anchor="center")
+    tree.column("auteur", anchor="center")
+    tree.column("nombre page", anchor="center")
+    tree.column("statut", anchor="center")
+
+    # headings
+    tree.heading("#0", text="")
+    tree.heading("titre", text="titre")
+    tree.heading("auteur", text="auteur")
+    tree.heading("nombre page", text="nombre page")
+    tree.heading("statut", text="statut")
+
+    # insert data
+    for livre in biblio.afficher_livre_disponible():
+        tree.insert("", "end", values=(livre.titre, livre.auteur, livre.nombre_page, livre.statut))
+
+    tree.pack(fill="both", expand=True)
 
 
 root = Tk()
@@ -61,6 +87,14 @@ main_frame = Frame(root, bg="white")
 # main_frame.pack(fill="both", expand=True) # This line should be removed when you incomment the login code
 
 notebook = ttk.Notebook(main_frame)
+
+# Afficher livres disponibles
+afficher_livres_tab = Frame(notebook, bg="#04bfb0")
+notebook.add(afficher_livres_tab, text="Afficher livres")
+
+tree = ttk.Treeview(afficher_livres_tab)
+afficher_dispo_livres()
+
 
 # Ajouter livre
 ajoute_tab = Frame(notebook, bg="#04bfb0")
