@@ -11,7 +11,7 @@ def check_login():
     if user == "yassine" and password == "1234":
         show_main_app()
     else:
-        messagebox.showerror(message="User name or password is wrong")
+        messagebox.showerror(message="Le nom d'utilisateur ou mot de passe est incorrect")
 
 def show_main_app():
     login_frame.pack_forget()  # hide login
@@ -60,7 +60,7 @@ root.config(bg="#04bfb0")
 biblio = Bibliotheque("Bibliothèque CMC", "Deroua")
 biblio.charger_livre() # Charger les livres dans l'attribut listeLivres[] depuis csv
 
-# ----Page de se connecter----
+# ------------------------------Page de se connecter-------------------------------------------------
 login_frame = Frame(root, bg="#04bfb0")
 login_frame.pack(fill="both", expand=True)
 
@@ -82,7 +82,7 @@ user_password.grid(row=2, column=1)
 
 Button(formulaire, text="se connecter", command=check_login).grid(row=3, column=0, columnspan=2)
 
-# ----L'application principale----
+# ----------------------------------------L'application principale---------------------------------------------
 main_frame = Frame(root, bg="white")
 # main_frame.pack(fill="both", expand=True) # This line should be removed when you incomment the login code
 
