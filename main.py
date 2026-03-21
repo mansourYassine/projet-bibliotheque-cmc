@@ -23,9 +23,11 @@ def ajoute_livre():
     nv_nbre_page = nbre_page_livre.get()
     
     livre = Livre(nv_titre, nv_auteur, nv_nbre_page)
+    # ajouter le livre dans Bibliotheque.listeLivres[] et dans le fichier csv
     biblio.ajouter_livre(livre)
-    global tree
-    tree.insert("", "end", values=(nv_titre, nv_auteur, nv_nbre_page, "disponible"))
+    # Ajouter le livre dans la page de Afficher livres disponibles
+    afficher_dispo_livres()
+    messagebox.showinfo(message="le livre a été ajouté avec succès")
 
 def afficher_dispo_livres():
     # define columns
@@ -88,15 +90,15 @@ main_frame = Frame(root, bg="white")
 
 notebook = ttk.Notebook(main_frame)
 
-# Afficher livres disponibles
+# --------------------------Afficher livres disponibles----------------------------
 afficher_livres_tab = Frame(notebook, bg="#04bfb0")
-notebook.add(afficher_livres_tab, text="Afficher livres")
+notebook.add(afficher_livres_tab, text="Afficher livres disponibles")
 
 tree = ttk.Treeview(afficher_livres_tab)
 afficher_dispo_livres()
 
 
-# Ajouter livre
+# --------------------------Ajouter livre---------------------------------------
 ajoute_tab = Frame(notebook, bg="#04bfb0")
 notebook.add(ajoute_tab, text="Ajouter Livre")
 
