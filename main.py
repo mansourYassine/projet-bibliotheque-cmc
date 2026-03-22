@@ -143,6 +143,36 @@ def rechercher_livre_par_titre():
         result_txt.insert(END,"Livre non trouvé")
 #pour_chercher
 Button(recherche_tab,text="Rechercher",command=rechercher_livre_par_titre).pack()
+#----------------------------Emprunter/Rendre----------------------------------
+emprunt_tab=Frame(notebook,bg="#04bfb0")
+notebook.add(emprunt_tab,text="Emprunter/Rendre Livre")
+
+title_var=StringVar()
+
+Label(emprunt_tab,text="Titre de Livre").grid(row=0,column=0,padx=10,pady=10)
+Entry(emprunt_tab,textvariable=title_var).grid(row=0,column=1,padx=10,pady=10)
+
+#fonctions
+def emprunter_livre():
+    livre=biblio.rechercher_livre(title_var.get())
+    if livre:
+        message=livre.emprunter()
+        messagebox.showinfo(title="Emprunter",message="le livre est emprunté")
+        afficher_dispo_livres
+    else:
+        messagebox.showerror(title="Emprunter",message="Ne trouve pas le livre")
+def rendre_livre():
+    livre=biblio.rechercher_livre(title_var.get())
+    if livre:
+        message=livre.rendre()
+        messagebox.showinfo(title="Rendre",message="le livre rendu")
+        afficher_dispo_livres
+    else:
+        messagebox.showerror(title="Rendre",message="Ne trouve pas le livre")
+        
+#pour_voir_result
+Button(emprunt_tab,text="Emprunter",command=emprunter_livre).grid(row=1,column=0,padx=10,pady=10)
+Button(emprunt_tab,text="Rendre",command=rendre_livre).grid(row=1,column=1,padx=10,pady=10)
 
 # start app
 root.mainloop()
