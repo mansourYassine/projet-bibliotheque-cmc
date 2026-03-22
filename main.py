@@ -122,6 +122,27 @@ nbre_page_livre.grid(row=3, column=1)
 Button(form_frame, text="Ajouter", command=ajoute_livre).grid(row=4, column=0, columnspan=2)
 
 notebook.pack(expand=True, fill='both')
+#------------------------Rechercher_livre-------------------------------------
+recherche_tab=Frame(notebook, bg="#04bfb0")
+notebook.add(recherche_tab, text="Rechercher Livre")
+
+rech_var = StringVar()
+
+Label(recherche_tab,text="Titre").pack()
+Entry(recherche_tab,textvariable=rech_var).pack()
+#zone_resultats
+result_txt=Text(recherche_tab, height=5)
+result_txt.pack()
+#fonction
+def rechercher_livre_par_titre():
+    result_txt.delete(1.0, END)
+    livre = biblio.rechercher_livre(rech_var.get())
+    if livre:
+        result_txt.insert(END,livre.afficher_details())
+    else:
+        result_txt.insert(END,"Livre non trouvé")
+#pour_chercher
+Button(recherche_tab,text="Rechercher",command=rechercher_livre_par_titre).pack()
 
 # start app
 root.mainloop()
