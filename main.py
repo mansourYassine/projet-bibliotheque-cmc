@@ -8,7 +8,7 @@ def check_login():
     user = user_name.get()
     password = user_password.get()
 
-    if user == "yassine" and password == "1234":
+    if user == "user" and password == "1234":
         show_main_app()
     else:
         messagebox.showerror(message="Le nom d'utilisateur ou mot de passe est incorrect")
@@ -25,11 +25,16 @@ def ajoute_livre():
     livre = Livre(nv_titre, nv_auteur, nv_nbre_page)
     # ajouter le livre dans Bibliotheque.listeLivres[] et dans le fichier csv
     biblio.ajouter_livre(livre)
+    # refrech les livres dans la menu de selection dans la page de l'emprute et rendre
+    selectionner_livre()
     # Ajouter le livre dans la page de Afficher livres disponibles
     afficher_dispo_livres()
     messagebox.showinfo(message="le livre a été ajouté avec succès")
 
 def afficher_dispo_livres():
+    # ✅ clear old data
+    tree.delete(*tree.get_children())
+    
     # define columns
     tree["columns"] = ("titre", "auteur", "nombre page", "statut")
 
@@ -53,9 +58,40 @@ def afficher_dispo_livres():
 
     tree.pack(fill="both", expand=True)
 
+def selectionner_livre():
+    global selected_option
+    combo = ttk.Combobox(form_frame, textvariable=selected_option, state="readonly")
+    # Add options
+    titres_livres = []
+    for livre in biblio.listeLivres:
+        titres_livres.append(livre.titre)
+
+    combo['values'] = titres_livres
+
+    Label(form_frame,text="Choisi le livre:").grid(row=1, column=0, columnspan=2)
+    combo.set("Choisi livre")
+    combo.grid(row=1, column=2)
+
+def voir_statut():
+    selected_livre_object = None
+    for livre in biblio.listeLivres:
+        if (livre.titre == selected_option.get()):
+            selected_livre_object = livre
+    if selected_livre_object.statut == "disponible":
+        answer1 = messagebox.askyesno(message=f"Le livre est : {selected_option.get()} et leur statut: {selected_livre_object.statut} \n Tu veux emprunter?")
+        if answer1 == True:
+            selected_livre_object.statut = "emprunter"
+            messagebox.showinfo(message="le livre a été emprunté avec succès")
+            afficher_dispo_livres()
+    else:
+        answer2 = messagebox.askyesno(message=f"Le livre est : {selected_option.get()} et leur statut: {selected_livre_object.statut} \n Tu veux rendre?")
+        if answer2 == True:
+            selected_livre_object.statut = "disponible"
+            messagebox.showinfo(message="le livre a été rendu avec succès")
+            afficher_dispo_livres()
 
 root = Tk()
-root.geometry("500x500")
+root.geometry("900x800")
 root.title("Bibliothèque CMC")
 root.config(bg="#04bfb0")
 
@@ -120,6 +156,25 @@ nbre_page_livre = Entry(form_frame)
 nbre_page_livre.grid(row=3, column=1)
 # Enregistrer
 Button(form_frame, text="Ajouter", command=ajoute_livre).grid(row=4, column=0, columnspan=2)
+
+# notebook.pack(expand=True, fill='both')
+
+# --------------------------Emprunter / Rendre livre---------------------------------------
+emprunter_rendre_tab=Frame(notebook, bg="#04bfb0")
+notebook.add(emprunter_rendre_tab, text="Emprunter / Rendre livre")
+
+form_frame = Frame(emprunter_rendre_tab)
+form_frame.pack()
+
+Label(form_frame,text="Choisi le livre à Emprunter / Rendre:", font=("arial", 20)).grid(row=0, column=0, columnspan=3)
+
+# store selected value
+selected_option = StringVar()
+
+selectionner_livre()
+
+# Enregistrer
+Button(form_frame, text="voir statut", command=voir_statut).grid(row=4, column=0, columnspan=4)
 
 notebook.pack(expand=True, fill='both')
 
