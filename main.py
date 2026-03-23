@@ -26,9 +26,7 @@ def ajoute_livre():
     # ajouter le livre dans Bibliotheque.listeLivres[] et dans le fichier csv
     biblio.ajouter_livre(livre)
     # refrech les livres dans la menu de selection dans la page de l'emprute et rendre
-    # global titres_livres
-    # for livre in biblio.listeLivres:
-    #     titres_livres.append(livre.titre)
+    selectionner_livre()
     # Ajouter le livre dans la page de Afficher livres disponibles
     afficher_dispo_livres()
     messagebox.showinfo(message="le livre a été ajouté avec succès")
@@ -59,6 +57,20 @@ def afficher_dispo_livres():
         tree.insert("", "end", values=(livre.titre, livre.auteur, livre.nombre_page, livre.statut))
 
     tree.pack(fill="both", expand=True)
+
+def selectionner_livre():
+    global selected_option
+    combo = ttk.Combobox(form_frame, textvariable=selected_option, state="readonly")
+    # Add options
+    titres_livres = []
+    for livre in biblio.listeLivres:
+        titres_livres.append(livre.titre)
+
+    combo['values'] = titres_livres
+
+    Label(form_frame,text="Choisi le livre:").grid(row=1, column=0, columnspan=2)
+    combo.set("Choisi livre")
+    combo.grid(row=1, column=2)
 
 def voir_statut():
     selected_livre_object = None
@@ -159,17 +171,7 @@ Label(form_frame,text="Choisi le livre à Emprunter / Rendre:", font=("arial", 2
 # store selected value
 selected_option = StringVar()
 
-combo = ttk.Combobox(form_frame, textvariable=selected_option, state="readonly")
-# Add options
-titres_livres = []
-for livre in biblio.listeLivres:
-    titres_livres.append(livre.titre)
-
-combo['values'] = titres_livres
-
-Label(form_frame,text="Choisi le livre:").grid(row=1, column=0, columnspan=2)
-combo.set("Choisi livre")
-combo.grid(row=1, column=2)
+selectionner_livre()
 
 # Enregistrer
 Button(form_frame, text="voir statut", command=voir_statut).grid(row=4, column=0, columnspan=4)
