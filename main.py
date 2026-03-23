@@ -8,7 +8,7 @@ def check_login():
     user = user_name.get()
     password = user_password.get()
 
-    if user == "1" and password == "1":
+    if user == "user" and password == "1234":
         show_main_app()
     else:
         messagebox.showerror(message="Le nom d'utilisateur ou mot de passe est incorrect")
@@ -91,7 +91,7 @@ def voir_statut():
             afficher_dispo_livres()
 
 root = Tk()
-root.geometry("500x500")
+root.geometry("900x800")
 root.title("Bibliothèque CMC")
 root.config(bg="#04bfb0")
 
