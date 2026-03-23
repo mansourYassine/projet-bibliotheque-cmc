@@ -10,9 +10,7 @@ class Livre:
 
     def emprunter(self):
         if self.statut=="disponible":
-            self.statut="emprunté"
-            return "livre emprunté"
+            self.statut="emprunte"
 
     def rendre(self):
         self.statut="disponible"
-        return "livre rendu"

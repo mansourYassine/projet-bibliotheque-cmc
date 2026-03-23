@@ -8,7 +8,7 @@ def check_login():
     user = user_name.get()
     password = user_password.get()
 
-    if user == "yassine" and password == "1234":
+    if user == "1" and password == "1":
         show_main_app()
     else:
         messagebox.showerror(message="Le nom d'utilisateur ou mot de passe est incorrect")
@@ -25,11 +25,18 @@ def ajoute_livre():
     livre = Livre(nv_titre, nv_auteur, nv_nbre_page)
     # ajouter le livre dans Bibliotheque.listeLivres[] et dans le fichier csv
     biblio.ajouter_livre(livre)
+    # refrech les livres dans la menu de selection dans la page de l'emprute et rendre
+    # global titres_livres
+    # for livre in biblio.listeLivres:
+    #     titres_livres.append(livre.titre)
     # Ajouter le livre dans la page de Afficher livres disponibles
     afficher_dispo_livres()
     messagebox.showinfo(message="le livre a été ajouté avec succès")
 
 def afficher_dispo_livres():
+    # ✅ clear old data
+    tree.delete(*tree.get_children())
+    
     # define columns
     tree["columns"] = ("titre", "auteur", "nombre page", "statut")
 
@@ -53,6 +60,23 @@ def afficher_dispo_livres():
 
     tree.pack(fill="both", expand=True)
 
+def voir_statut():
+    selected_livre_object = None
+    for livre in biblio.listeLivres:
+        if (livre.titre == selected_option.get()):
+            selected_livre_object = livre
+    if selected_livre_object.statut == "disponible":
+        answer1 = messagebox.askyesno(message=f"Le livre est : {selected_option.get()} et leur statut: {selected_livre_object.statut} \n Tu veux emprunter?")
+        if answer1 == True:
+            selected_livre_object.statut = "emprunter"
+            messagebox.showinfo(message="le livre a été emprunté avec succès")
+            afficher_dispo_livres()
+    else:
+        answer2 = messagebox.askyesno(message=f"Le livre est : {selected_option.get()} et leur statut: {selected_livre_object.statut} \n Tu veux rendre?")
+        if answer2 == True:
+            selected_livre_object.statut = "disponible"
+            messagebox.showinfo(message="le livre a été rendu avec succès")
+            afficher_dispo_livres()
 
 root = Tk()
 root.geometry("500x500")
@@ -121,58 +145,36 @@ nbre_page_livre.grid(row=3, column=1)
 # Enregistrer
 Button(form_frame, text="Ajouter", command=ajoute_livre).grid(row=4, column=0, columnspan=2)
 
+# notebook.pack(expand=True, fill='both')
+
+# --------------------------Emprunter / Rendre livre---------------------------------------
+emprunter_rendre_tab=Frame(notebook, bg="#04bfb0")
+notebook.add(emprunter_rendre_tab, text="Emprunter / Rendre livre")
+
+form_frame = Frame(emprunter_rendre_tab)
+form_frame.pack()
+
+Label(form_frame,text="Choisi le livre à Emprunter / Rendre:", font=("arial", 20)).grid(row=0, column=0, columnspan=3)
+
+# store selected value
+selected_option = StringVar()
+
+combo = ttk.Combobox(form_frame, textvariable=selected_option, state="readonly")
+# Add options
+titres_livres = []
+for livre in biblio.listeLivres:
+    titres_livres.append(livre.titre)
+
+combo['values'] = titres_livres
+
+Label(form_frame,text="Choisi le livre:").grid(row=1, column=0, columnspan=2)
+combo.set("Choisi livre")
+combo.grid(row=1, column=2)
+
+# Enregistrer
+Button(form_frame, text="voir statut", command=voir_statut).grid(row=4, column=0, columnspan=4)
+
 notebook.pack(expand=True, fill='both')
-#------------------------Rechercher_livre-------------------------------------
-recherche_tab=Frame(notebook, bg="#04bfb0")
-notebook.add(recherche_tab, text="Rechercher Livre")
-
-rech_var = StringVar()
-
-Label(recherche_tab,text="Titre").pack()
-Entry(recherche_tab,textvariable=rech_var).pack()
-#zone_resultats
-result_txt=Text(recherche_tab, height=5)
-result_txt.pack()
-#fonction
-def rechercher_livre_par_titre():
-    result_txt.delete(1.0, END)
-    livre = biblio.rechercher_livre(rech_var.get())
-    if livre:
-        result_txt.insert(END,livre.afficher_details())
-    else:
-        result_txt.insert(END,"Livre non trouvé")
-#pour_chercher
-Button(recherche_tab,text="Rechercher",command=rechercher_livre_par_titre).pack()
-#----------------------------Emprunter/Rendre----------------------------------
-emprunt_tab=Frame(notebook,bg="#04bfb0")
-notebook.add(emprunt_tab,text="Emprunter/Rendre Livre")
-
-title_var=StringVar()
-
-Label(emprunt_tab,text="Titre de Livre").grid(row=0,column=0,padx=10,pady=10)
-Entry(emprunt_tab,textvariable=title_var).grid(row=0,column=1,padx=10,pady=10)
-
-#fonctions
-def emprunter_livre():
-    livre=biblio.rechercher_livre(title_var.get())
-    if livre:
-        message=livre.emprunter()
-        messagebox.showinfo(title="Emprunter",message="le livre est emprunté")
-        afficher_dispo_livres
-    else:
-        messagebox.showerror(title="Emprunter",message="Ne trouve pas le livre")
-def rendre_livre():
-    livre=biblio.rechercher_livre(title_var.get())
-    if livre:
-        message=livre.rendre()
-        messagebox.showinfo(title="Rendre",message="le livre rendu")
-        afficher_dispo_livres
-    else:
-        messagebox.showerror(title="Rendre",message="Ne trouve pas le livre")
-        
-#pour_voir_result
-Button(emprunt_tab,text="Emprunter",command=emprunter_livre).grid(row=1,column=0,padx=10,pady=10)
-Button(emprunt_tab,text="Rendre",command=rendre_livre).grid(row=1,column=1,padx=10,pady=10)
 
 # start app
 root.mainloop()
